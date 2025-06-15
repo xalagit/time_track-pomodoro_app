@@ -4,12 +4,17 @@ import PySimpleGUI as sg
 
 def start_timer(duration, window):
     start_time = datetime.now()
+    tiempo_trabajado = 0
 
     while duration > 0:
         mins, secs = divmod(duration, 60)
         window['-TIMER-'].update(f'{mins:02}:{secs:02}')
         event, _ = window.read(timeout=1000)
-        if event in (None, 'Salir'):
+        if event in (None, 'Salir', 'Detener'):
+            end_time = datetime.now()
+            tiempo_trabajado = int((end_time - start_time).total_seconds())
+            if tiempo_trabajado > 0:
+                log_session(start_time, end_time, tiempo_trabajado)
             return
         duration -= 1
 
